@@ -25,7 +25,7 @@ class Product(models.Model):
     unit_price= models.DecimalField(max_digits=2, decimal_places=2)
     inventory=models.IntegerField()
     last_update=models.DateTimeField(auto_now=True)
-    Collection=models.ForeignKey(Collection, on_delete=models.PROTECT)
+    collection=models.ForeignKey(Collection, on_delete=models.PROTECT)
     promotions=models.ManyToManyField(Promotion)
 
     def __str__(self) -> str:
@@ -52,12 +52,16 @@ class Customer(models.Model):
     birth_date=models.DateField(null=True)
     membership=models.CharField(max_length=1, choices=MEMBERSHIP_CHOICES, default=MEMBERSHIP_BRONZE)
 
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+
 
     class Meta:
         db_table='store_customers'
         indexes= [
             models.Index(fields=['last_name','first_name'])
         ]
+        ordering = ['first_name','last_name']
 
 class Order(models.Model):
     PAYMENT_STATUS_PENDING = 'P'
